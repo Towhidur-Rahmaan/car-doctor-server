@@ -13,8 +13,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://your-firebase-project.web.app",
-      "https://your-firebase-project.firebaseapp.com",
+      "https://car-doctor-11635.web.app/",
+      "https://car-doctor-11635.firebaseapp.com/",
     ],
     credentials: true,
   }),
@@ -168,8 +168,8 @@ async function run() {
       res
         .cookie("token", token, {
           httpOnly: true,
-          secure: false,
-          sameSite: "lax",
+          secure: true,
+          sameSite: "none",
         })
         .send({ success: true });
     });
