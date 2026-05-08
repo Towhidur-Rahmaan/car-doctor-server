@@ -13,12 +13,14 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://car-doctor-11635.web.app/",
-      "https://car-doctor-11635.firebaseapp.com/",
+      "https://car-doctor-11635.web.app",
+      "https://car-doctor-11635.firebaseapp.com",
     ],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
+app.options("*", cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -168,15 +170,21 @@ async function run() {
       res
         .cookie("token", token, {
           httpOnly: true,
-          secure: true,
-          sameSite: "none",
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         })
         .send({ success: true });
     });
 
     app.post("/logout", async (req, res) => {
       const user = req.body;
-      res.clearCookie("token", { maxAge: 0 }).send({ success: true });
+      res
+        .clearCookie("token", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        })
+        .send({ success: true });
     });
 
     //service related api
