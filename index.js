@@ -9,15 +9,22 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 //Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://car-doctor-11635.web.app",
+  "https://car-doctor-11635.firebaseapp.com",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://car-doctor-11635.web.app",
-      "https://car-doctor-11635.firebaseapp.com",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
 app.options("*", cors());
