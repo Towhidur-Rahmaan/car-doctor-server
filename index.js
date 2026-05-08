@@ -94,6 +94,11 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/test", (req, res) => {
+      res.set("Access-Control-Allow-Origin", "*");
+      res.json({ message: "backend working" });
+    });
+
     app.get("/reviews", async (req, res) => {
       const result = await reviewCollection.find().sort({ _id: -1 }).toArray();
       res.send(result);
